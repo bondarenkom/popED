@@ -1,6 +1,6 @@
-Package: popRF
+Package: popED
 Type: Package
-Title: Population Distributed Equally
+Title: Package to produce a gridded population equally distributed
 Version: 0.0.1
 Authors@R: c(
     person( 
@@ -22,23 +22,29 @@ Authors@R: c(
           role = c("ctb"), 
           email = "as1v13@soton.ac.uk", 
           comment = c(ORCID = "0000-0002-3576-5826")
-          )
+          ),
+    person( 
+          given = "Tom", 
+          family = "McKeen", 
+          role = c("ctb"), 
+          email = "t.l.mckeen@soton.ac.uk"
+          )          
     )
 Author: Maksym Bondarenko [aut, cre, cph] (<https://orcid.org/0000-0003-4958-6551>),
   David Kerr [ctb],
   Alessandro Sorichetta [ctb] (<https://orcid.org/0000-0002-3576-5826>)
-Maintainer: Maksym Bondarenko <mb4@soton.ac.uk> and   
-Description: Population Distributed Equally
+Maintainer: Maksym Bondarenko <mb4@soton.ac.uk>  
+Description: Package to produce a gridded population equally distributed using 
+  pixel area as weight.
 URL: https://github.com/bondarenkom/popED
-BugReports: , https://sdi.worldpop.org/issues
+BugReports: https://sdi.worldpop.org/issues
 Imports: 
     doParallel, 
     parallel, 
     raster, 
     methods, 
     stats, 
-    foreach, 
-    gdalUtils, 
+    foreach,  
     snow, 
     plyr
 Depends: R (>= 3.2.0)
