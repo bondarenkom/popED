@@ -83,16 +83,22 @@ rasterize_parallel_start <- function(x,
     
     b <- d$value$tag
     
-    if ((silent == FALSE) & (i%%10 == 0) )   {
+    if ((silent == FALSE) )   {
       
-      progress_message(x=i, 
-                       max=blocks$n, 
-                       label=paste0("received block ", 
-                                    i, 
-                                    " Processing Time: ", 
-                                    tmDiff(tStart,tEnd)
-                       )
-      )     
+      if ((i%%10 == 0) | (i==blocks$n) )   {
+        
+        
+        progress_message(x=i, 
+                         max=blocks$n, 
+                         label=paste0("received block ", 
+                                      i, 
+                                      " Processing Time: ", 
+                                      tmDiff(tStart,tEnd)
+                         )
+        )             
+        
+      }
+
       
     }  
     
