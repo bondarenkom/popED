@@ -120,6 +120,9 @@ popED <- function(mastergrid,
                                        overwrite=TRUE, 
                                        silent=F)
   
+  if (verbose){
+    cat("\n")  
+  }
   
   log_info("MSG", paste0("Calculating zonal stats  ", px_area_base_name ), 
            verbose=verbose)
@@ -148,6 +151,10 @@ popED <- function(mastergrid,
                                                   overwrite=TRUE, 
                                                   silent=F)
   
+  
+  if (verbose){
+    cat("\n")  
+  } 
   
   log_info("MSG", paste0("Calculating pop distributed equally  "), 
            verbose=verbose)
