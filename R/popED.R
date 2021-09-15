@@ -133,6 +133,10 @@ popED <- function(mastergrid,
                                                      silent=TRUE)  
   
   
+  if (verbose){
+    cat("\n")  
+  }
+  
   log_info("MSG", paste0("Rasterizing pixel area  "), 
            verbose=verbose)
   
