@@ -1,4 +1,96 @@
 #' @title Function compute zonal statistics. 
+#' @usage
+#' zonal_stats(x, y, fun='mean', cores=4, file_name=NULL, nt=2, verbose=TRUE)
+#' @param x Raster* object
+#' @param y RasterLayer object with codes representing zones
+#' @param fun The function to be applied. Either as character: 'mean', 'min', 'max' and 'sum'
+#' @param cores Integer. Number of cores for parallel calculation
+#' @param file_name Character vector containing the path to the file output
+#' @param nt Numeric. Increase number of blocks sugesting for 
+#'        processing raster file. Default is \code{nt} = 2
+#' @param verbose If FALSE then the progress will be shown
+#' @rdname zonal_stats
+#' @return A data.frame with a value for each zone (unique value in zones)
+#' @export
+#' @examples
+#' \dontrun{
+#' zonal_stats( x=rasterObj1, y=rasterObj2, cores=2)
+#' }
+zonal_stats <- function(x, y, fun='mean', cores=4, file_name=NULL, nt=2, verbose=TRUE) {
+  
+  if(!file.exists( x )) {
+    
+    msg <- paste0("Error ::  Raster file does not exist")
+    stop(msg)
+    
+  } 
+  
+  if(!file.exists( y )) {
+    
+    msg <- paste0("Error :: Raste file with codes representing zones  does not exist")
+    stop(msg)
+    
+  } 
+  
+  if (!is.null(file_name)){
+    
+    dir_name <- dirname(file_name)
+    
+    if(!file.exists(dir_name)) {
+      
+      msg <- paste0("Error :: Please check if path to a output file is corect ", dir_name)
+      stop(msg)
+      
+    } 
+    
+  }  
+
+  
+  x.rst <- raster(x)
+  y.rst <- raster(y)
+
+  
+  log_info("MSG", paste0("Start calculation of zonal stats "), 
+           verbose=verbose)
+  
+  
+  silent <- if (verbose) FALSE else TRUE
+  
+  blocks_size <- get_blocks_size(x.rst, cores, n=nt)      
+  
+  npoc_blocks <- ifelse(blocks_size$n < cores, blocks_size$n, cores)
+  
+  df <- calculate_zs_parallel(x.rst, 
+                              y.rst, 
+                              fun=fun, 
+                              cores=npoc_blocks, 
+                              blocks=blocks_size, 
+                              na.rm=TRUE, 
+                              silent=silent)
+  
+  
+  if (!is.null(file_name)){
+    
+    log_info("MSG", paste0("Saving results to ", basename(file_name)), 
+             verbose=verbose)
+    
+    colnames(df) <- c("ADMINID", fun)
+
+    write.csv( as.data.frame(df), file = file_name, row.names=FALSE ) 
+    
+  }
+  
+  
+  return(df)
+  
+  
+}
+
+
+
+
+
+#' @title Function compute zonal statistics. 
 #'        That is, cross-tabulate the values of a Raster* object based on a 
 #'        "zones" RasterLayer. NA values are removed. 
 #'        Function uses \code{\link[doParallel]{registerDoParallel}} 
